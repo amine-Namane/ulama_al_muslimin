@@ -13,7 +13,6 @@ import TestimonialsSection from '@/components/testimonials'
 export default function StudentPage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* <Navbar /> */}
       <Herosections />
       <HalqatList />
       <FeaturesSection />
@@ -21,7 +20,6 @@ export default function StudentPage() {
       <TestimonialsSection />
       <HowItWorksSection />
       <DonationSection />
-      {/* <Footer/> */}
     </main>
   )
 }

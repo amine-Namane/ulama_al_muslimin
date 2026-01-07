@@ -15,7 +15,7 @@ export default function Navbar() {
     { name: "البرامج", href: "halqat" },
     { name: "الشيوخ", href: "#programs" },
     { name: "تبرع معنا", href: "donate" },
-    { name: "تواصل معنا", href: "#contact" },
+    { name: "تواصل معنا", href: "contact" },
   ]
 
   return (
