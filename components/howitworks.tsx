@@ -55,8 +55,9 @@ const steps = [
     duration: "مستمر"
   }
 ]
+type ColorType = 'primary' | 'secondary'
 
-const getColorClasses = (color) => {
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       background: 'bg-emerald-50',

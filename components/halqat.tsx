@@ -81,8 +81,9 @@ const halaqat = [
     rating: 4.9
   }
 ]
+type ColorType = 'primary' | 'secondary'
 
-const getColorClasses = (color) => {
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       header: 'bg-gradient-to-r from-emerald-900 to-teal-800 text-white',
@@ -101,8 +102,12 @@ const getColorClasses = (color) => {
   }
   return colors[color] || colors.primary
 }
-
-const getLevelBadge = (level) => {
+type LevelType =
+  | 'مبتدئ'
+  | 'متقدم'
+  | 'جميع المستويات'
+  | 'أطفال (6-12 سنة)'
+const getLevelBadge = (level:LevelType) => {
   const badges = {
     'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
     'متقدم': 'bg-emerald-50 text-emerald-800 border border-emerald-200',
