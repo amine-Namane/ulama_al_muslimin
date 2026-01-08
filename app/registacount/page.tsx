@@ -50,7 +50,7 @@ type UserType = {
   inviteCode?: string
 }
 
-const [selectedType, setSelectedType] = useState<UserType | null>(null)
+// const [selectedType, setSelectedType] = useState<UserType | null>(null)
 
 const accountTypes: AccountType[] = [
   {

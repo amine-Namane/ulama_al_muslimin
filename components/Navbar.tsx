@@ -12,14 +12,14 @@ export default function Navbar() {
   const navLinks = [
     { name: "الرئيسية", href: "/" },
     { name: "من نحن", href: "aboutus" },
-    { name: "البرامج", href: "halqat" },
-    { name: "الشيوخ", href: "#programs" },
+    { name: "الحلقات", href: "halqat" },
+    { name: "البرامج", href: "programs" },
     { name: "تبرع معنا", href: "donate" },
     { name: "تواصل معنا", href: "contact" },
   ]
 
   return (
-    <header dir="rtl" className="fixed top-0 left-0 w-full bg-[#f8fafc]/80 backdrop-blur-md border-b border-gray-200 z-50 mb-20">
+    <header dir="rtl" className="fixed top-0 left-0 w-full bg-[#f8fafc]/80 backdrop-blur-md  border-gray-200 z-50  ">
       <div className="max-w-7xl mx-auto flex  items-center px-6 py-4">
         {/* Logo */}
         <Link href="/" className="text-sm font-bold text-[#10b981] tracking-tight">
@@ -37,12 +37,14 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          <Link href={'login'}>
           <Button className="bg-[#10b981] hover:bg-[#059669] text-white rounded-full px-5 ml-5">
             تسجيل الدخول
-          </Button>
+          </Button></Link>
+          <Link href={'registacount'}>
           <Button className="bg-[#10b981] hover:bg-[#059669] text-white rounded-full px-5">
            طلب تسجيل
-          </Button>
+          </Button></Link>
         </nav>
 
 
@@ -76,9 +78,9 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <Button className="bg-[#10b981] hover:bg-[#059669] text-white rounded-full px-5">
+              <Link href={'login'} className="bg-[#10b981] hover:bg-[#059669] text-white rounded-full px-5">
                 تسجيل الدخول
-              </Button>
+              </Link>
             </div>
           </motion.div>
         )}

@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         {!isPlatformPage && <Navbar />}
         
-        <main className={!isPlatformPage ? "pt-20" : ""}>
+        <main  className='mt-20'>
           {children}
         </main>
         
