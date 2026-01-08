@@ -1,8 +1,18 @@
 import { motion } from 'framer-motion'
 import { UserCheck, ClipboardCheck, CalendarCheck, Award, ChevronLeft, Users, Clock, BookOpen } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
-const steps = [
-  {
+type Step = {
+  step: number
+  icon: LucideIcon
+  title: string
+  description: string
+  details: string[]
+  color: ColorType
+  duration: string
+}
+
+const steps: Step[] = [  {
     step: 1,
     icon: UserCheck,
     title: "اختر الحلقة المناسبة",

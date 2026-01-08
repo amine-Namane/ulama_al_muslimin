@@ -1,7 +1,20 @@
 import { Calendar, Users, Clock, MapPin, Star, ChevronLeft, BookOpen, GraduationCap } from "lucide-react";
 import { motion } from 'framer-motion'
+type Halqa = {
+  id: number
+  name: string
+  sheikh: string
+  time: string
+  location: string
+  students: number
+  level: LevelType
+  days: string
+  description: string
+  color: ColorType
+  rating: number
+}
 
-const halaqat = [
+const halaqat: Halqa[] = [
   {
     id: 1,
     name: "حلقة التجويد المتقدم",
