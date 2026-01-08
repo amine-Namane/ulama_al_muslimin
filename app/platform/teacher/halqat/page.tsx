@@ -548,6 +548,8 @@ import {
   Plus, Eye, Filter, MoreVertical, Play, Edit, Trash2, Copy,
   Video, Mic, CheckCircle, AlertCircle, TrendingUp, Target, Star
 } from 'lucide-react'
+import { useEffect } from 'react'
+
 
 export default function ClassesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -555,6 +557,8 @@ export default function ClassesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [viewMode, setViewMode] = useState('grid')
+  const [isDesktop, setIsDesktop] = useState(false)
+
 type ClassLevel = 'متقدم' | 'متقدم جداً' | 'متوسط' | 'مبتدئ' | 'أطفال';
 type ClassStatus = 'active' | 'upcoming' | 'paused';
 
@@ -772,6 +776,15 @@ type Status = 'active' | 'upcoming' | 'paused';
     }
     return texts[status] || 'غير معروف'
   }
+useEffect(() => {
+  const checkScreen = () => {
+    setIsDesktop(window.innerWidth >= 1024)
+  }
+
+  checkScreen()
+  window.addEventListener('resize', checkScreen)
+  return () => window.removeEventListener('resize', checkScreen)
+}, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50" dir="rtl">
@@ -789,7 +802,7 @@ type Status = 'active' | 'upcoming' | 'paused';
       }`}>
         <div className="flex flex-col h-full p-4">
           <div className="flex items-center justify-between mb-8">
-            {(sidebarOpen || window.innerWidth >= 1024) && (
+            {(sidebarOpen || isDesktop) && (
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl font-bold">
                   📖
