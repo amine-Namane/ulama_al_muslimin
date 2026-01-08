@@ -2,7 +2,18 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Users, Building, Gift, Heart, CheckCircle } from 'lucide-react';
 
-const donationAreas = [
+type DonationArea = {
+  icon: typeof BookOpen;
+  title: string;
+  description: string;
+  percentage: number;
+  color: ColorType;
+  impact: string;
+  details: string[];
+};
+
+// Add the type annotation here
+const donationAreas: DonationArea[] = [
   {
     icon: BookOpen,
     title: "دعم المدارس القرآنية",
@@ -49,6 +60,7 @@ const donationAreas = [
     details: ["كفالة الأيتام", "مساعدات شهرية", "برامج رمضان"]
   }
 ];
+
 type ColorType = 'primary' | 'secondary'
 
 const getColorClasses = (color:ColorType) => {

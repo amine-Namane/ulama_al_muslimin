@@ -11,7 +11,20 @@ const steps = [
   { id: 5, title: "المستندات", icon: FileText }
 ]
 
-const halaqatOptions = [
+type LevelType =
+  | 'مبتدئ'
+  | 'متقدم'
+  | 'جميع المستويات'
+  | 'أطفال (6-12 سنة)'
+
+type HalqaOption = {
+  id: number
+  name: string
+  level: LevelType
+  time: string
+}
+
+const halaqatOptions: HalqaOption[] = [
   { id: 1, name: "حلقة التجويد المتقدم", level: "متقدم", time: "بعد صلاة الفجر" },
   { id: 2, name: "حلقة حفظ جزء عم", level: "مبتدئ", time: "بعد صلاة العصر" },
   { id: 3, name: "حلقة القرآن الكريم للنساء", level: "جميع المستويات", time: "بعد صلاة الظهر" },
@@ -19,13 +32,33 @@ const halaqatOptions = [
   { id: 5, name: "حلقة المراجعة والإتقان", level: "متقدم", time: "بعد صلاة المغرب" },
   { id: 6, name: "حلقة تفسير القرآن", level: "جميع المستويات", time: "بعد صلاة العشاء" }
 ]
-type LevelType =
-  | 'مبتدئ'
-  | 'متقدم'
-  | 'جميع المستويات'
-  | 'أطفال (6-12 سنة)'
 
-const getLevelBadge = (level:LevelType) => {
+type FormData = {
+  firstName: string
+  lastName: string
+  birthDate: string
+  gender: string
+  nationalId: string
+  email: string
+  phone: string
+  address: string
+  city: string
+  wilaya: string
+  selectedHalqa: number | null
+  memorizedJuz: string
+  previousExperience: string
+  learningGoals: string
+  guardianName: string
+  guardianRelation: string
+  guardianPhone: string
+  guardianEmail: string
+  guardianAddress: string
+  photoUrl: File | null
+  birthCertificate: File | null
+  medicalCertificate: File | null
+}
+
+const getLevelBadge = (level: LevelType) => {
   const badges = {
     'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
     'متقدم': 'bg-emerald-50 text-emerald-800 border border-emerald-200',
@@ -37,7 +70,7 @@ const getLevelBadge = (level:LevelType) => {
 
 export default function RegistrationPage() {
   const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     birthDate: '',
@@ -65,7 +98,7 @@ export default function RegistrationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [registrationComplete, setRegistrationComplete] = useState(false)
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -73,14 +106,14 @@ export default function RegistrationPage() {
     }))
   }
 
-  const handleFileUpload = (fieldName, file) => {
+  const handleFileUpload = (fieldName: keyof FormData, file: File | null) => {
     setFormData(prev => ({
       ...prev,
       [fieldName]: file
     }))
   }
 
-  const handleHalqaSelect = (halqaId) => {
+  const handleHalqaSelect = (halqaId: number) => {
     setFormData(prev => ({
       ...prev,
       selectedHalqa: halqaId
@@ -236,7 +269,7 @@ export default function RegistrationPage() {
           <path
             fill="currentColor"
             fillOpacity="1"
-            d="M0,192L60,181.3C120,171,240,149,360,128C480,107,600,85,720,112C840,139,960,213,1080,234.7C1200,256,1320,224,1380,208L1440,192L1440,320L0,320Z"
+            d="M0,192L60,181.3C120,171,240,149,360,128C480,107,600,85,720,112C840,139,960,213,1080,234.7C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
           ></path>
         </svg>
       </section>
@@ -485,7 +518,7 @@ export default function RegistrationPage() {
                       name="learningGoals"
                       value={formData.learningGoals}
                       onChange={handleChange}
-                      rows="3"
+                      rows={3}
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none resize-none text-right"
                       placeholder="ما الذي تريد تحقيقه من خلال الحلقة؟"
                     ></textarea>
@@ -602,7 +635,7 @@ export default function RegistrationPage() {
                             type="file" 
                             accept="image/*" 
                             className="hidden" 
-                            onChange={(e) => handleFileUpload('photoUrl', e.target.files[0])}
+                            onChange={(e) => handleFileUpload('photoUrl', e.target.files?.[0] || null)}
                           />
                         </label>
                         {formData.photoUrl && (
@@ -624,7 +657,7 @@ export default function RegistrationPage() {
                             type="file" 
                             accept="image/*,.pdf" 
                             className="hidden"
-                            onChange={(e) => handleFileUpload('birthCertificate', e.target.files[0])}
+                            onChange={(e) => handleFileUpload('birthCertificate', e.target.files?.[0] || null)}
                           />
                         </label>
                         {formData.birthCertificate && (
@@ -646,7 +679,7 @@ export default function RegistrationPage() {
                             type="file" 
                             accept="image/*,.pdf" 
                             className="hidden"
-                            onChange={(e) => handleFileUpload('medicalCertificate', e.target.files[0])}
+                            onChange={(e) => handleFileUpload('medicalCertificate', e.target.files?.[0] || null)}
                           />
                         </label>
                         {formData.medicalCertificate && (

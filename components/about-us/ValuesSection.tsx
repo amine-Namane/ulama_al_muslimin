@@ -2,7 +2,14 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Heart, Users, Shield } from 'lucide-react';
 
-const values = [
+type Value = {
+  icon: typeof BookOpen;
+  title: string;
+  description: string;
+  color: ColorType;
+};
+
+const values: Value[] = [
   {
     icon: BookOpen,
     title: "الإتقان العلمي",
@@ -28,6 +35,7 @@ const values = [
     color: "secondary"
   }
 ];
+
 type ColorType = 'primary' | 'secondary'
 const getColorClasses = (color:ColorType) => {
   const colors = {

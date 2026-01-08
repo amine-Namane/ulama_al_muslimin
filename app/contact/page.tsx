@@ -124,41 +124,41 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
-  const [expandedFAQ, setExpandedFAQ] = useState(null)
+const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null)
   const [mapLoaded, setMapLoaded] = useState(false)
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitSuccess(true)
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        inquiryType: '',
-        message: ''
-      })
-      
-      setTimeout(() => {
-        setSubmitSuccess(false)
-      }, 5000)
-    }, 2000)
-  }
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  setIsSubmitting(true)
 
-  const handleChange = (e) => {
+  // Simulate form submission
+  setTimeout(() => {
+    setIsSubmitting(false)
+    setSubmitSuccess(true)
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      inquiryType: '',
+      message: ''
+    })
+
+    setTimeout(() => setSubmitSuccess(false), 5000)
+  }, 2000)
+}
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const toggleFAQ = (index) => {
-    setExpandedFAQ(expandedFAQ === index ? null : index)
-  }
+ const toggleFAQ = (index: number) => {
+  setExpandedFAQ(expandedFAQ === index ? null : index)
+}
+
 
   const handleMapLoad = () => {
     setMapLoaded(true)

@@ -1,7 +1,16 @@
 import { motion } from 'framer-motion'
 import { BarChart3, Users, UserCheck, Zap, Smartphone, Shield, ChevronLeft } from 'lucide-react'
+type ColorType = 'primary' | 'secondary';
 
-const features = [
+type Feature = {
+  icon: any;
+  title: string;
+  description: string;
+  stats: string;
+  color: ColorType;
+};
+
+const features: Feature[] = [
   {
     icon: BarChart3,
     title: "تتبع ذكي للتقدم",

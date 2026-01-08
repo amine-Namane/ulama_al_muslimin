@@ -1,7 +1,13 @@
 "use client";
 import { motion } from 'framer-motion';
 
-const donationAreas = [
+type DonationArea = {
+  title: string;
+  percentage: number;
+  color: ColorType;
+};
+
+const donationAreas: DonationArea[] = [
   { title: "دعم المدارس القرآنية", percentage: 35, color: "primary" },
   { title: "منح الطلاب المحتاجين", percentage: 25, color: "secondary" },
   { title: "صيانة وتطوير المراكز", percentage: 20, color: "primary" },
@@ -9,7 +15,9 @@ const donationAreas = [
   { title: "برامج إنسانية واجتماعية", percentage: 5, color: "primary" }
 ];
 
-const getColorClasses = (color) => {
+type ColorType = 'primary' | 'secondary'
+
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       gradient: 'from-emerald-500 to-teal-600'

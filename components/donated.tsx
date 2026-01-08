@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion'
 import { Heart, Users, BookOpen, Building, Shield, ChevronLeft, CheckCircle, Gift } from 'lucide-react'
+type DonationArea = {
+  icon: React.ElementType; // lucide-react icons
+  title: string;
+  description: string;
+  percentage: number;
+  color: ColorType; // this ensures only 'primary' or 'secondary'
+  impact: string;
+};
 
-const donationAreas = [
-  {
+const donationAreas: DonationArea[] = [  {
     icon: BookOpen,
     title: "تطوير الحلقات القرآنية",
     description: "توفير الكتب والأدوات التعليمية، تجهيز القاعات، ودعم الشيوخ والمعلمين",
@@ -53,8 +60,9 @@ const transparencyFeatures = [
     description: "تبرعك يستمر في العطاء لسنوات قادمة"
   }
 ]
+type ColorType = 'primary' | 'secondary';
 
-const getColorClasses = (color) => {
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       background: 'bg-emerald-50',

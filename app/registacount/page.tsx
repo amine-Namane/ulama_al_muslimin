@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Mail, Phone, Lock, Eye, EyeOff, CheckCircle, ChevronLeft, UserCheck, Users, GraduationCap, Shield, Calendar, MapPin, BookOpen, UserPlus, X, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+
 type ColorType = 'emerald' | 'teal' | 'cyan'
 
 type LevelType =
@@ -25,22 +26,40 @@ type HalqaOption = {
   level: LevelType
   time: string
 }
+
 type RegisterFormData = {
   email: string
   password: string
   confirmPassword: string
-    firstName: string
-    lastName: string
-    phone: number
-    address: string
-    emergencyContact: string
-    birthDate: number
-    gender: 'male' | 'female' | ''
-    previousKnowledge: string
-    qualification: string
-    experience: string
-    specialization: string
+  firstName: string
+  lastName: string
+  phone: string // Changed from number to string
+  address: string
+  emergencyContact: string
+  birthDate: string // Changed from number to string
+  gender: 'male' | 'female' | ''
+  previousKnowledge: string
+  qualification: string
+  experience: string
+  specialization: string
+  city?: string // Added optional
+  wilaya?: string // Added optional
 }
+
+type ChildData = {
+  id: string
+  firstName: string
+  lastName: string
+  birthDate: string
+  gender: string
+  nationalId: string
+  previousKnowledge: string
+  selectedHalqa: string | null
+  learningGoals: string
+  email: string
+  password: string
+}
+
 type UserType = {
   id: string
   type: 'student' | 'parent' | 'sheikh'
@@ -49,8 +68,6 @@ type UserType = {
   phone: string
   inviteCode?: string
 }
-
-// const [selectedType, setSelectedType] = useState<UserType | null>(null)
 
 const accountTypes: AccountType[] = [
   {
@@ -107,38 +124,33 @@ const halaqatOptions: HalqaOption[] = [
 ]
 
 export default function ParentDirectRegistrationPage() {
-  const [selectedType, setSelectedType] = useState(null)
+  const [selectedType, setSelectedType] = useState<'student' | 'parent' | 'sheikh' | null>(null)
   const [currentStep, setCurrentStep] = useState('selection') // selection, registration, children, success
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
-const [formData, setFormData] = useState<RegisterFormData>({
+  const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phone:0 ,
+    phone: '',
     address: '',
-
     emergencyContact: '',
-    
-    // Student specific (for student registration)
-    birthDate: 0,
+    birthDate: '',
     gender: '',
     previousKnowledge: '',
-    
-    // Sheikh specific
     qualification: '',
     experience: '',
     specialization: '',
   })
 
   // Children accounts
-  const [children, setChildren] = useState([])
-  const [currentChild, setCurrentChild] = useState({
+  const [children, setChildren] = useState<ChildData[]>([])
+  const [currentChild, setCurrentChild] = useState<Omit<ChildData, 'id'> & { id?: string }>({
     firstName: '',
     lastName: '',
     birthDate: '',
@@ -150,13 +162,14 @@ const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: ''
   })
+  
   const [showChildForm, setShowChildForm] = useState(false)
-  const [editingChildIndex, setEditingChildIndex] = useState(null)
+  const [editingChildIndex, setEditingChildIndex] = useState<number | null>(null)
 
-  const [errors, setErrors] = useState({})
-  const [registrationData, setRegistrationData] = useState(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [registrationData, setRegistrationData] = useState<UserType | null>(null)
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -170,7 +183,7 @@ const [formData, setFormData] = useState<RegisterFormData>({
     }
   }
 
-  const handleChildChange = (e) => {
+  const handleChildChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setCurrentChild(prev => ({
       ...prev,
@@ -190,7 +203,7 @@ const [formData, setFormData] = useState<RegisterFormData>({
       updatedChildren[editingChildIndex] = { 
         ...currentChild,
         id: currentChild.id || `CHILD-${Date.now()}`
-      }
+      } as ChildData
       setChildren(updatedChildren)
       setEditingChildIndex(null)
     } else {
@@ -200,7 +213,7 @@ const [formData, setFormData] = useState<RegisterFormData>({
         id: `CHILD-${Date.now()}`,
         email: currentChild.email || `${currentChild.firstName.toLowerCase()}.${currentChild.lastName.toLowerCase()}@student.quranic.dz`,
         password: currentChild.password || Math.random().toString(36).slice(-8)
-      }])
+      } as ChildData])
     }
 
     // Reset form
@@ -219,18 +232,18 @@ const [formData, setFormData] = useState<RegisterFormData>({
     setShowChildForm(false)
   }
 
-  const editChild = (index) => {
+  const editChild = (index: number) => {
     setCurrentChild(children[index])
     setEditingChildIndex(index)
     setShowChildForm(true)
   }
 
-  const removeChild = (index) => {
+  const removeChild = (index: number) => {
     setChildren(children.filter((_, i) => i !== index))
   }
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors: Record<string, string> = {}
 
     if (!formData.email) {
       newErrors.email = 'البريد الإلكتروني مطلوب'
@@ -276,7 +289,7 @@ const [formData, setFormData] = useState<RegisterFormData>({
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!validateForm()) {
@@ -286,9 +299,9 @@ const [formData, setFormData] = useState<RegisterFormData>({
     setIsSubmitting(true)
     
     setTimeout(() => {
-      const userData = {
-        id: `${selectedType.toUpperCase()[0]}${Math.floor(Math.random() * 10000).toString().padStart(3, '0')}`,
-        type: selectedType,
+      const userData: UserType = {
+        id: `${selectedType?.toUpperCase()[0]}${Math.floor(Math.random() * 10000).toString().padStart(3, '0')}`,
+        type: selectedType!,
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         phone: formData.phone,
@@ -314,13 +327,13 @@ const [formData, setFormData] = useState<RegisterFormData>({
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const selectAccountType = (type) => {
+  const selectAccountType = (type: 'student' | 'parent' | 'sheikh') => {
     setSelectedType(type)
     setCurrentStep('registration')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-const getColorClasses = (color: ColorType) => {
+  const getColorClasses = (color: ColorType) => {
     const colors = {
       emerald: {
         bg: 'bg-emerald-50',
@@ -347,7 +360,7 @@ const getColorClasses = (color: ColorType) => {
     return colors[color] || colors.emerald
   }
 
-const getLevelBadge = (level: LevelType) => {
+  const getLevelBadge = (level: LevelType) => {
     const badges = {
       'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
       'متقدم': 'bg-emerald-50 text-emerald-800 border border-emerald-200',
@@ -727,7 +740,12 @@ const getLevelBadge = (level: LevelType) => {
                         {halaqatOptions.map((halqa) => (
                           <div
                             key={halqa.id}
-                            onClick={() => handleChildChange({ target: { name: 'selectedHalqa', value: halqa.id } })}
+                          onClick={() =>
+  handleChildChange({
+    target: { name: 'selectedHalqa', value: halqa.id }
+  } as React.ChangeEvent<HTMLInputElement>)
+}
+
                             className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                               currentChild.selectedHalqa === halqa.id
                                 ? 'border-emerald-500 bg-emerald-50'
@@ -760,7 +778,7 @@ const getLevelBadge = (level: LevelType) => {
                         name="learningGoals"
                         value={currentChild.learningGoals}
                         onChange={handleChildChange}
-                        rows="3"
+                        rows={3}
                         className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none resize-none text-right"
                         placeholder="ما الذي تريد أن يحققه ابنك من خلال الحلقة؟"
                       ></textarea>
@@ -851,7 +869,7 @@ const getLevelBadge = (level: LevelType) => {
           <path
             fill="currentColor"
             fillOpacity="1"
-            d="M0,192L60,181.3C120,171,240,149,360,128C480,107,600,85,720,112C840,139,960,213,1080,234.7C1200,256,1320,224,1380,208L1440,192L1440,320L0,320Z"
+            d="M0,192L60,181.3C120,171,240,149,360,128C480,107,600,85,720,112C840,139,960,213,1080,234.7C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
           ></path>
         </svg>
       </section>
@@ -944,7 +962,7 @@ const getLevelBadge = (level: LevelType) => {
               </motion.div>
             )}
 
-            {/* Registration Form - Same as before but abbreviated for length */}
+            {/* Registration Form */}
             {currentStep === 'registration' && (
               <motion.div
                 key="registration"
@@ -1067,7 +1085,7 @@ const getLevelBadge = (level: LevelType) => {
                               <input
                                 type="text"
                                 name="city"
-                                value={formData.city}
+                                value={formData.city || ''}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 rounded-xl border ${errors.city ? 'border-red-500' : 'border-gray-300'} focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none text-right`}
                                 placeholder="أدخل المدينة"
@@ -1080,7 +1098,7 @@ const getLevelBadge = (level: LevelType) => {
                               <input
                                 type="text"
                                 name="wilaya"
-                                value={formData.wilaya}
+                                value={formData.wilaya || ''}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 rounded-xl border ${errors.wilaya ? 'border-red-500' : 'border-gray-300'} focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none text-right`}
                                 placeholder="أدخل الولاية"

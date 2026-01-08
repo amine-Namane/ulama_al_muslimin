@@ -1,10 +1,67 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Clock, Users, MapPin, BookOpen, Award, ChevronLeft, Star, CheckCircle, Sun, Snowflake, Leaf, Wind, User, Mosque, GraduationCap, Trophy } from 'lucide-react'
+import { Calendar, Clock, Users, MapPin, BookOpen, Award, ChevronLeft, Star, CheckCircle, Sun, Snowflake, Leaf, Wind, User, GraduationCap, Trophy } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
+type ColorType = 'emerald' | 'teal' | 'amber' | 'rose' | 'orange' | 'purple' | 'blue' | 'green' | 'indigo'
+type LevelType = 'مبتدئ' | 'متوسط' | 'متقدم' | 'أطفال' | 'جميع المستويات' | 'الحفاظ'
 
-const weeklyPrograms = [
+interface Program {
+  id: string;
+  name: string;
+  description: string;
+  shortDescription: string;
+  schedule: string;
+  time: string;
+  duration: string;
+  location: string;
+  targetAge: string;
+  maxStudents: number;
+  currentStudents: number;
+  level: LevelType;
+  features: string[];
+  sheikh: string;
+  sheikhImage: string;
+  programImage: string;
+  sheikhExperience: string;
+  programIcon: any; // or use Lucide icon type
+  price: string;
+  color: ColorType;
+  tags: string[];
+}
+
+interface SeasonalProgram extends Program {
+  season: string;
+  period: string;
+  includes: string[];
+  teacherTeam: string;
+  earlyBirdPrice?: string;
+  registrationDeadline: string;
+  icon: any; // or use Lucide icon type
+}
+const weeklyPrograms: Array<{
+  id: string;
+  name: string;
+  description: string;
+  shortDescription: string;
+  schedule: string;
+  time: string;
+  duration: string;
+  location: string;
+  targetAge: string;
+  maxStudents: number;
+  currentStudents: number;
+  level: LevelType;
+  features: string[];
+  sheikh: string;
+  sheikhImage: string;
+  programImage: string;
+  sheikhExperience: string;
+  programIcon: any;
+  price: string;
+  color: ColorType;
+  tags: string[];
+}> = [
   {
     id: 'W001',
     name: 'برنامج الحفظ المكثف',
@@ -177,7 +234,35 @@ const weeklyPrograms = [
   },
 ]
 
-const seasonalPrograms = [
+const seasonalPrograms: Array<{
+  id: string;
+  name: string;
+  description: string;
+  shortDescription: string;
+  season: string;
+  period: string;
+  schedule: string;
+  time: string;
+  duration: string;
+  location: string;
+  targetAge: string;
+  maxStudents: number;
+  currentStudents: number;
+  level: LevelType;
+  features: string[];
+  includes: string[];
+  sheikh: string;
+  sheikhImage: string;
+  programImage: string;
+  teacherTeam: string;
+  sheikhExperience: string;
+  price: string;
+  earlyBirdPrice?: string;
+  registrationDeadline: string;
+  icon: any;
+  color: ColorType;
+  tags: string[];
+}>  = [
   {
     id: 'S001',
     name: 'البرنامج الصيفي المكثف',
@@ -273,7 +358,7 @@ const seasonalPrograms = [
     targetAge: '10-17 سنة (طلاب)',
     maxStudents: 60,
     currentStudents: 42,
-    level: 'مبتدئ - متوسط',
+    level: 'متوسط',
     features: [
       'حفظ 2-3 صفحات يومياً',
       'مراجعة شاملة',
@@ -355,7 +440,7 @@ const seasonalPrograms = [
     targetAge: '13-18 سنة',
     maxStudents: 50,
     currentStudents: 35,
-    level: 'متوسط - متقدم',
+    level: 'متقدم',
     features: [
       'حفظ ومراجعة مكثفة (20 صفحة أسبوعياً)',
       'دورة تجويد متقدمة',
@@ -389,7 +474,7 @@ const seasonalPrograms = [
 export default function ProgramsPage() {
   const [activeTab, setActiveTab] = useState('weekly')
 
-  const getColorClasses = (color: string) => {
+  const getColorClasses = (color: ColorType) => {
     const colors = {
       emerald: {
         bg: 'bg-emerald-50',
@@ -467,7 +552,7 @@ export default function ProgramsPage() {
     return colors[color] || colors.emerald
   }
 
-  const getLevelBadge = (level: string) => {
+  const getLevelBadge = (level: LevelType) => {
     const badges = {
       'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
       'متوسط': 'bg-teal-50 text-teal-800 border border-teal-200',

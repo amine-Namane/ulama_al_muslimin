@@ -59,42 +59,47 @@ const [formData, setFormData] = useState<LoginFormData>({
   })
 
   const [resetEmail, setResetEmail] = useState('')
-const [errors, setErrors] = useState<FormErrors>({})
+const [errors, setErrors] = useState<FormErrors>({} as FormErrors)
   const [loginError, setLoginError] = useState('')
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData(prev => ({
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const target = e.target as HTMLInputElement; // cast to HTMLInputElement
+  const { name, value, type, checked } = target;
+
+  setFormData(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+
+  // Type-safe errors update
+  if (name in errors) {
+    setErrors(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
-    setLoginError('')
+      [name as keyof LoginFormData]: ''
+    }));
   }
 
-  const validateForm = () => {
-    const newErrors = {}
+  setLoginError('');
+};
 
-    if (!formData.email) {
-      newErrors.email = 'البريد الإلكتروني مطلوب'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'البريد الإلكتروني غير صحيح'
-    }
+ const validateForm = () => {
+  const newErrors: { email?: string; password?: string } = {}
 
-    if (!formData.password) {
-      newErrors.password = 'كلمة المرور مطلوبة'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+  if (!formData.email) {
+    newErrors.email = 'البريد الإلكتروني مطلوب'
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    newErrors.email = 'البريد الإلكتروني غير صحيح'
   }
 
-  const handleSubmit = (e) => {
+  if (!formData.password) {
+    newErrors.password = 'كلمة المرور مطلوبة'
+  }
+
+  setErrors(newErrors)
+  return Object.keys(newErrors).length === 0
+}
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
     if (!validateForm()) {
@@ -117,7 +122,7 @@ const [errors, setErrors] = useState<FormErrors>({})
     }, 1500)
   }
 
-  const handleForgotPassword = (e) => {
+  const handleForgotPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
     if (!resetEmail || !/\S+@\S+\.\S+/.test(resetEmail)) {
