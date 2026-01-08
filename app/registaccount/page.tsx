@@ -2,8 +2,57 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Mail, Phone, Lock, Eye, EyeOff, CheckCircle, ChevronLeft, UserCheck, Users, GraduationCap, Shield, Calendar, MapPin, BookOpen, UserPlus, X, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+type ColorType = 'emerald' | 'teal' | 'cyan'
 
-const accountTypes = [
+type LevelType =
+  | 'مبتدئ'
+  | 'متقدم'
+  | 'جميع المستويات'
+  | 'أطفال (6-12 سنة)'
+
+type AccountType = {
+  id: 'student' | 'parent' | 'sheikh'
+  title: string
+  description: string
+  icon: any
+  color: ColorType
+  features: string[]
+}
+
+type HalqaOption = {
+  id: string
+  name: string
+  level: LevelType
+  time: string
+}
+type RegisterFormData = {
+  email: string
+  password: string
+  confirmPassword: string
+    firstName: string
+    lastName: string
+    phone: number
+    address: string
+    emergencyContact: string
+    birthDate: number
+    gender: 'male' | 'female' | ''
+    previousKnowledge: string
+    qualification: string
+    experience: string
+    specialization: string
+}
+type UserType = {
+  id: string
+  type: 'student' | 'parent' | 'sheikh'
+  name: string
+  email: string
+  phone: string
+  inviteCode?: string
+}
+
+const [selectedType, setSelectedType] = useState<UserType | null>(null)
+
+const accountTypes: AccountType[] = [
   {
     id: 'student',
     title: 'حساب طالب',
@@ -48,7 +97,7 @@ const accountTypes = [
   }
 ]
 
-const halaqatOptions = [
+const halaqatOptions: HalqaOption[] = [
   { id: 'H001', name: 'حلقة التجويد المتقدم', level: 'متقدم', time: 'بعد الفجر' },
   { id: 'H002', name: 'حلقة حفظ جزء عم', level: 'مبتدئ', time: 'بعد العصر' },
   { id: 'H003', name: 'حلقة القرآن الكريم للنساء', level: 'جميع المستويات', time: 'بعد الظهر' },
@@ -65,23 +114,20 @@ export default function ParentDirectRegistrationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
-  const [formData, setFormData] = useState({
-    // Parent fields
+const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phone: '',
+    phone:0 ,
     address: '',
-    city: '',
-    wilaya: '',
+
     emergencyContact: '',
     
     // Student specific (for student registration)
-    birthDate: '',
+    birthDate: 0,
     gender: '',
-    nationalId: '',
     previousKnowledge: '',
     
     // Sheikh specific
@@ -274,7 +320,7 @@ export default function ParentDirectRegistrationPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const getColorClasses = (color) => {
+const getColorClasses = (color: ColorType) => {
     const colors = {
       emerald: {
         bg: 'bg-emerald-50',
@@ -301,7 +347,7 @@ export default function ParentDirectRegistrationPage() {
     return colors[color] || colors.emerald
   }
 
-  const getLevelBadge = (level) => {
+const getLevelBadge = (level: LevelType) => {
     const badges = {
       'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
       'متقدم': 'bg-emerald-50 text-emerald-800 border border-emerald-200',

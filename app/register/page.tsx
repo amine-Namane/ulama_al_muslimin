@@ -19,8 +19,13 @@ const halaqatOptions = [
   { id: 5, name: "حلقة المراجعة والإتقان", level: "متقدم", time: "بعد صلاة المغرب" },
   { id: 6, name: "حلقة تفسير القرآن", level: "جميع المستويات", time: "بعد صلاة العشاء" }
 ]
+type LevelType =
+  | 'مبتدئ'
+  | 'متقدم'
+  | 'جميع المستويات'
+  | 'أطفال (6-12 سنة)'
 
-const getLevelBadge = (level) => {
+const getLevelBadge = (level:LevelType) => {
   const badges = {
     'مبتدئ': 'bg-blue-50 text-blue-800 border border-blue-200',
     'متقدم': 'bg-emerald-50 text-emerald-800 border border-emerald-200',
@@ -33,30 +38,25 @@ const getLevelBadge = (level) => {
 export default function RegistrationPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
-    // Step 1 - Personal Info
     firstName: '',
     lastName: '',
     birthDate: '',
     gender: '',
     nationalId: '',
-    // Step 2 - Contact Info
     email: '',
     phone: '',
     address: '',
     city: '',
     wilaya: '',
-    // Step 3 - Halqa Selection
     selectedHalqa: null,
     memorizedJuz: '',
     previousExperience: '',
     learningGoals: '',
-    // Step 4 - Guardian Info
     guardianName: '',
     guardianRelation: '',
     guardianPhone: '',
     guardianEmail: '',
     guardianAddress: '',
-    // Step 5 - Documents
     photoUrl: null,
     birthCertificate: null,
     medicalCertificate: null
@@ -473,7 +473,7 @@ export default function RegistrationPage() {
                       name="previousExperience"
                       value={formData.previousExperience}
                       onChange={handleChange}
-                      rows="3"
+                      rows={3}
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none resize-none text-right"
                       placeholder="هل سبق لك الالتحاق بحلقة قرآنية؟ أخبرنا عن تجربتك..."
                     ></textarea>

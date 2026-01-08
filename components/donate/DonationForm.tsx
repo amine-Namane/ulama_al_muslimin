@@ -2,6 +2,31 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, CreditCard, BanknoteX, Phone } from 'lucide-react';
+type DonorInfo = {
+  name: string
+  email: string
+  phone: string
+  message: string
+}
+
+type DonationFormProps = {
+  selectedAmount: number
+  setSelectedAmount: React.Dispatch<React.SetStateAction<number>>
+
+  customAmount: string
+  setCustomAmount: React.Dispatch<React.SetStateAction<string>>
+
+  selectedArea: string
+  setSelectedArea: React.Dispatch<React.SetStateAction<string>>
+
+  paymentMethod: string
+  setPaymentMethod: React.Dispatch<React.SetStateAction<string>>
+
+  donorInfo: DonorInfo
+  setDonorInfo: React.Dispatch<React.SetStateAction<DonorInfo>>
+
+  handleDonate: () => void
+}
 
 const donationAmounts = [
   { amount: 100, label: "ريال", impact: "توفير كتب لطالب", popular: false },
@@ -32,22 +57,30 @@ const paymentMethods = [
   }
 ];
 
-const DonationForm = ({ 
-  selectedAmount, 
-  setSelectedAmount, 
-  customAmount, 
-  setCustomAmount, 
-  selectedArea, 
-  setSelectedArea, 
-  paymentMethod, 
-  setPaymentMethod, 
-  donorInfo, 
+const DonationForm = ({
+  selectedAmount,
+  setSelectedAmount,
+  customAmount,
+  setCustomAmount,
+  selectedArea,
+  setSelectedArea,
+  paymentMethod,
+  setPaymentMethod,
+  donorInfo,
   setDonorInfo,
-  handleDonate 
-}) => {
-  const handleDonorInfoChange = (field, value) => {
-    setDonorInfo(prev => ({ ...prev, [field]: value }));
-  };
+  handleDonate,
+}: DonationFormProps) => {
+
+ const handleDonorInfoChange = <K extends keyof DonorInfo>(
+  field: K,
+  value: DonorInfo[K]
+) => {
+  setDonorInfo(prev => ({
+    ...prev,
+    [field]: value,
+  }))
+}
+
 
   return (
     <motion.div
@@ -190,7 +223,7 @@ const DonationForm = ({
               placeholder="رسالة خاصة (اختياري)"
               value={donorInfo.message}
               onChange={(e) => handleDonorInfoChange('message', e.target.value)}
-              rows="3"
+              rows={3}
               className="bg-gray-50 border border-gray-300 rounded-xl py-3 px-4 text-right focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent md:col-span-2"
             />
           </div>

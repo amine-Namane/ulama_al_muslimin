@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Calendar, User, Chevro
 import { useState } from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
-const contactMethods = [
+const contactMethods: ContactMethod[]= [
   {
     icon: Phone,
     title: "اتصل بنا",
@@ -34,6 +34,13 @@ const contactMethods = [
     color: "secondary"
   }
 ]
+type ContactMethod = {
+  icon: any
+  title: string
+  value: string
+  description: string
+  color: ColorType
+}
 
 const inquiryTypes = [
   "الاستفسار عن التسجيل",
@@ -84,7 +91,9 @@ const faqData = [
   }
 ]
 
-const getColorClasses = (color) => {
+type ColorType = 'primary' | 'secondary'
+
+const getColorClasses = (color: ColorType) => {
   const colors = {
     primary: {
       background: 'bg-emerald-50',
@@ -205,7 +214,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 -mt-32 relative z-20">
             {contactMethods.map((method, index) => {
-              const colorClass = getColorClasses(method.color)
+              const colorClass = getColorClasses(method.color  )
               return (
                 <motion.div
                   key={index}
@@ -344,7 +353,7 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       required
-                      rows="5"
+                      rows={5}
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none resize-none text-right"
                       placeholder="اكتب رسالتك هنا..."
                     ></textarea>

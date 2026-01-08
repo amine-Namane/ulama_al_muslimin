@@ -28,8 +28,8 @@ const values = [
     color: "secondary"
   }
 ];
-
-const getColorClasses = (color) => {
+type ColorType = 'primary' | 'secondary'
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       background: 'bg-emerald-50',

@@ -3,8 +3,25 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Users, Clock, MapPin, Star, ChevronLeft, BookOpen, Search, Filter, X } from 'lucide-react'
+type Halqa = {
+  id: number
+  name: string
+  sheikh: string
+  time: string
+  location: string
+  students: number
+  level: LevelType
+  days: string
+  description: string
+  color: ColorType
+  rating: number
+  duration: string
+  requirements: string
+  ageGroup: string
+  price: string
+}
 
-const allHalaqat = [
+const allHalaqat: Halqa[] = [
   {
     id: 1,
     name: "حلقة التجويد المتقدم",
@@ -145,8 +162,9 @@ const allHalaqat = [
 
 const levels = ["جميع المستويات", "مبتدئ", "متقدم", "أطفال (6-12 سنة)"]
 const times = ["جميع الأوقات", "بعد صلاة الفجر", "بعد صلاة الظهر", "بعد صلاة العصر", "بعد صلاة المغرب", "بعد صلاة العشاء", "4:00 مساءً"]
+type ColorType = 'primary' | 'secondary'
 
-const getColorClasses = (color) => {
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       header: 'bg-gradient-to-r from-emerald-900 to-teal-800 text-white',
@@ -165,8 +183,13 @@ const getColorClasses = (color) => {
   }
   return colors[color] || colors.primary
 }
+type LevelType =
+  | 'مبتدئ'
+  | 'متقدم'
+  | 'جميع المستويات'
+  | 'أطفال (6-12 سنة)'
 
-const getLevelBadge = (level) => {
+const getLevelBadge = (level:LevelType) => {
   const badges = {
     'مبتدئ': 'bg-green-100 text-green-800 border border-green-200',
     'متقدم': 'bg-blue-100 text-blue-800 border border-blue-200',
