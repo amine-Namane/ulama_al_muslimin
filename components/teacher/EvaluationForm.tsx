@@ -52,15 +52,28 @@ interface Comment {
   date: string
   type: 'positive' | 'constructive' | 'warning'
 }
+interface FormData {
+  student: string
+  memorized: string
+  notes: string
+  rating: number
+}
+
 export default function EvaluationForm() {
- const evaluations: Evaluation[] = [
+  const [formData, setFormData] = useState<FormData>({
+    student: '',
+    memorized: '',
+    notes: '',
+    rating: 0,
+  })
+
+  const evaluations: Evaluation[] = [
     { id: 1, studentId: 1, studentName: 'أحمد بن خالد', memorized: 'من آية 1 إلى 10 من سورة الكهف', notes: 'أداء ممتاز مع تجويد جيد', date: '2024-01-15', rating: 5 },
     { id: 2, studentId: 2, studentName: 'عبد الرحمن بن يوسف', memorized: 'مراجعة سورة البقرة من ١-٥٠', notes: 'يحتاج تحسين في المدود', date: '2024-01-14', rating: 4 },
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
     console.log('Evaluation submitted:', formData)
   }
 

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   X, Users, Clock, CheckCircle, XCircle, AlertCircle, Star,
   MessageCircle, Award, TrendingUp, Save, Send, Play, Pause,
@@ -7,11 +7,28 @@ import {
   Phone, Mail, Eye, Edit, Plus, Minus, RotateCcw
 } from 'lucide-react'
 
+type AttendanceStatus = 'present' | 'absent' | 'late' | 'excused'
+
+interface Student {
+  id: number
+  name: string
+  avatar: string
+  attendance: AttendanceStatus | null
+  participation: number
+  recitation: number
+  homework: 'done' | 'partial' | 'not-done' | null
+  oldMemorization: 'reviewed' | 'not-reviewed' | null
+  oldMemorizationQuality: number
+  newMemorization: string
+  notes: string
+  lastWeekAttendance: AttendanceStatus[]
+  streak: number
+}
+
 export default function AttendanceSession() {
   const [sessionStarted, setSessionStarted] = useState(false)
   const [sessionTime, setSessionTime] = useState(0)
-  const [showNotes, setShowNotes] = useState(false)
-  const [selectedStudent, setSelectedStudent] = useState(null)
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
 
   const sessionInfo = {
     className: "حلقة التجويد المتقدم",
@@ -21,7 +38,8 @@ export default function AttendanceSession() {
     duration: "ساعة ونصف"
   }
 
-  const [students, setStudents] = useState([
+  // Initial student data with proper typing
+  const initialStudents: Student[] = [
     {
       id: 1,
       name: "أحمد محمد الصالح",
@@ -112,30 +130,83 @@ export default function AttendanceSession() {
       lastWeekAttendance: ["present", "present", "present"],
       streak: 18
     }
-  ])
+  ]
 
-  const updateAttendance = (studentId, status) => {
-    setStudents(students.map(s => 
-      s.id === studentId ? { ...s, attendance: status } : s
-    ))
+  const [students, setStudents] = useState<Student[]>(initialStudents)
+
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    
+    if (sessionStarted) {
+      interval = setInterval(() => {
+        setSessionTime(prev => prev + 1)
+      }, 1000)
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [sessionStarted])
+
+  const updateAttendance = (studentId: number, status: AttendanceStatus) => {
+    setStudents(prevStudents => 
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, attendance: status } : s
+      )
+    )
   }
 
-  const updateRating = (studentId, field, value) => {
-    setStudents(students.map(s => 
-      s.id === studentId ? { ...s, [field]: value } : s
-    ))
+  const updateRating = (
+    studentId: number,
+    field: keyof Pick<Student, 'participation' | 'recitation' | 'oldMemorizationQuality'>,
+    value: number
+  ) => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, [field]: value } : s
+      )
+    )
   }
 
-  const updateNotes = (studentId, notes) => {
-    setStudents(students.map(s => 
-      s.id === studentId ? { ...s, notes } : s
-    ))
+  const updateHomework = (studentId: number, value: 'done' | 'partial' | 'not-done') => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, homework: value } : s
+      )
+    )
   }
 
-  const updateNewMemorization = (studentId, text) => {
-    setStudents(students.map(s => 
-      s.id === studentId ? { ...s, newMemorization: text } : s
-    ))
+  const updateOldMemorization = (studentId: number, value: 'reviewed' | 'not-reviewed') => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, oldMemorization: value } : s
+      )
+    )
+  }
+
+  const updateOldMemorizationQuality = (studentId: number, value: number) => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, oldMemorizationQuality: value } : s
+      )
+    )
+  }
+
+  const updateNotes = (studentId: number, notes: string) => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, notes } : s
+      )
+    )
+  }
+
+  const updateNewMemorization = (studentId: number, text: string) => {
+    setStudents(prevStudents =>
+      prevStudents.map(s =>
+        s.id === studentId ? { ...s, newMemorization: text } : s
+      )
+    )
   }
 
   const stats = {
@@ -146,7 +217,7 @@ export default function AttendanceSession() {
     excused: students.filter(s => s.attendance === 'excused').length
   }
 
-  const getAttendanceColor = (status) => {
+  const getAttendanceColor = (status: AttendanceStatus) => {
     const colors = {
       present: 'bg-emerald-500',
       absent: 'bg-rose-500',
@@ -156,13 +227,23 @@ export default function AttendanceSession() {
     return colors[status] || 'bg-gray-300'
   }
 
+  const handleSaveSession = () => {
+    console.log('Saving session...', students)
+    alert('تم حفظ بيانات الحلقة بنجاح!')
+  }
+
+  const handleSendReport = () => {
+    console.log('Sending reports...')
+    alert('تم إرسال التقارير لأولياء الأمور!')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 p-4 md:p-8" dir="rtl">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
           {/* Top Bar */}
-          <div className="bg-gradient-to-r from-teal-800 to-cyan-700  p-6 text-white">
+          <div className="bg-gradient-to-r from-teal-800 to-cyan-700 p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">{sessionInfo.className}</h1>
@@ -325,7 +406,7 @@ export default function AttendanceSession() {
                   </div>
                   <div className="flex gap-2 mb-3">
                     <button
-                      onClick={() => updateRating(student.id, 'oldMemorization', 'reviewed')}
+                      onClick={() => updateOldMemorization(student.id, 'reviewed')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
                         student.oldMemorization === 'reviewed'
                           ? 'bg-emerald-700 text-white'
@@ -336,7 +417,7 @@ export default function AttendanceSession() {
                       <span className="text-sm font-bold">عرض</span>
                     </button>
                     <button
-                      onClick={() => updateRating(student.id, 'oldMemorization', 'not-reviewed')}
+                      onClick={() => updateOldMemorization(student.id, 'not-reviewed')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
                         student.oldMemorization === 'not-reviewed'
                           ? 'bg-gray-500 text-white'
@@ -354,7 +435,7 @@ export default function AttendanceSession() {
                         {[1, 2, 3, 4, 5].map((star) => (
                           <button
                             key={star}
-                            onClick={() => updateRating(student.id, 'oldMemorizationQuality', star)}
+                            onClick={() => updateOldMemorizationQuality(student.id, star)}
                             className="transition-transform hover:scale-110"
                           >
                             <Star
@@ -415,7 +496,7 @@ export default function AttendanceSession() {
                   <div className="text-sm font-semibold text-gray-700 mb-2">الواجب المنزلي</div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => updateRating(student.id, 'homework', 'done')}
+                      onClick={() => updateHomework(student.id, 'done')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
                         student.homework === 'done'
                           ? 'bg-emerald-500 text-white'
@@ -426,7 +507,7 @@ export default function AttendanceSession() {
                       <span className="text-sm font-bold">مكتمل</span>
                     </button>
                     <button
-                      onClick={() => updateRating(student.id, 'homework', 'partial')}
+                      onClick={() => updateHomework(student.id, 'partial')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
                         student.homework === 'partial'
                           ? 'bg-amber-500 text-white'
@@ -437,7 +518,7 @@ export default function AttendanceSession() {
                       <span className="text-sm font-bold">جزئي</span>
                     </button>
                     <button
-                      onClick={() => updateRating(student.id, 'homework', 'not-done')}
+                      onClick={() => updateHomework(student.id, 'not-done')}
                       className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
                         student.homework === 'not-done'
                           ? 'bg-rose-500 text-white'
@@ -462,7 +543,7 @@ export default function AttendanceSession() {
                   onChange={(e) => updateNewMemorization(student.id, e.target.value)}
                   placeholder="مثال: سورة البقرة من آية 1 إلى آية 5"
                   className="w-full p-3 bg-teal-50 border-2 border-teal-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm resize-none"
-                  rows="2"
+                  rows={2}
                 />
               </div>
 
@@ -474,7 +555,7 @@ export default function AttendanceSession() {
                   onChange={(e) => updateNotes(student.id, e.target.value)}
                   placeholder="اكتب ملاحظاتك عن أداء الطالب..."
                   className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm resize-none"
-                  rows="2"
+                  rows={2}
                 />
               </div>
             </div>
@@ -486,11 +567,17 @@ export default function AttendanceSession() {
       <div className="max-w-7xl mx-auto mt-8">
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-6">
           <div className="flex flex-col md:flex-row gap-4">
-            <button className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl hover:from-emerald-600 hover:to-teal-600 font-bold text-lg shadow-lg">
+            <button 
+              onClick={handleSaveSession}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl hover:from-emerald-600 hover:to-teal-600 font-bold text-lg shadow-lg"
+            >
               <Save size={24} />
               حفظ وإنهاء الحلقة
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 font-bold text-lg border-2 border-blue-200">
+            <button 
+              onClick={handleSendReport}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 font-bold text-lg border-2 border-blue-200"
+            >
               <Send size={24} />
               إرسال تقرير لأولياء الأمور
             </button>

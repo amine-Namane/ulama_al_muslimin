@@ -1,9 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
+type Testimonial = {
+  id: number
+  name: string
+  role: string
+  rating: number
+  text: string
+  avatar: string
+  color: ColorType
+}
 
-const testimonials = [
-  {
+const testimonials: Testimonial[] = [  {
     id: 1,
     name: "والدة الطالب أحمد",
     role: "ولي أمر",
@@ -58,8 +66,9 @@ const testimonials = [
     color: "secondary"
   }
 ]
+type ColorType = 'primary' | 'secondary'
 
-const getColorClasses = (color) => {
+const getColorClasses = (color:ColorType) => {
   const colors = {
     primary: {
       border: 'border-emerald-200',

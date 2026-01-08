@@ -555,8 +555,33 @@ export default function ClassesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [viewMode, setViewMode] = useState('grid')
+type ClassLevel = 'متقدم' | 'متقدم جداً' | 'متوسط' | 'مبتدئ' | 'أطفال';
+type ClassStatus = 'active' | 'upcoming' | 'paused';
 
-  const classes = [
+interface Class {
+  id: number;
+  name: string;
+  description: string;
+  teacher: string;
+  students: number;
+  maxStudents: number;
+  level: ClassLevel;
+  schedule: string;
+  time: string;
+  duration: string;
+  room: string;
+  status: ClassStatus;
+  startDate: string;
+  progress: number;
+  completionRate: number;
+  attendance: number;
+  nextSession: string;
+  color: string;
+  materials: string[];
+  objectives: string[];
+}
+
+const classes: Class[] = [ 
     {
       id: 1,
       name: "حلقة التجويد المتقدم",
@@ -716,8 +741,9 @@ export default function ClassesPage() {
     { icon: Award, label: "الإنجازات", value: "achievements" },
     { icon: Settings, label: "الإعدادات", value: "settings" }
   ]
+type Level = 'متقدم' | 'متقدم جداً' | 'متوسط' | 'مبتدئ' | 'أطفال';
 
-  const getLevelColor = (level) => {
+  const getLevelColor = (level:Level) => {
     const colors = {
       'متقدم': 'bg-purple-100 text-purple-700 border-purple-200',
       'متقدم جداً': 'bg-rose-100 text-rose-700 border-rose-200',
@@ -727,8 +753,9 @@ export default function ClassesPage() {
     }
     return colors[level] || 'bg-gray-100 text-gray-700 border-gray-200'
   }
+type Status = 'active' | 'upcoming' | 'paused';
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status:Status) => {
     const colors = {
       'active': 'bg-emerald-100 text-emerald-700 border-emerald-200',
       'upcoming': 'bg-blue-100 text-blue-700 border-blue-200',
@@ -737,7 +764,7 @@ export default function ClassesPage() {
     return colors[status] || 'bg-gray-100 text-gray-700 border-gray-200'
   }
 
-  const getStatusText = (status) => {
+  const getStatusText = (status:Status) => {
     const texts = {
       'active': 'نشطة',
       'upcoming': 'قادمة',
