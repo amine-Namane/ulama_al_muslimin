@@ -1,4 +1,5 @@
 import { Calendar, Users, Clock, MapPin, Star, ChevronLeft, BookOpen, GraduationCap } from "lucide-react";
+import Link from "next/link"
 import { motion } from 'framer-motion'
 type Halqa = {
   id: number
@@ -246,10 +247,11 @@ export default function HalqatList() {
                     </div>
 
                     {/* CTA Button */}
+                    <Link href={'register'}>
                     <button className={`w-full mt-6 ${colorClass.button} py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}>
                       <span>سجل الآن في الحلقة</span>
                       <ChevronLeft className="w-4 h-4" />
-                    </button>
+                    </button></Link>
                   </div>
                 </div>
               </motion.div>

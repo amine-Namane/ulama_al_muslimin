@@ -22,7 +22,7 @@ const contactMethods: ContactMethod[]= [
   {
     icon: MapPin,
     title: "موقعنا",
-    value: "الجزائر، المسجد الكبير",
+    value: "الجزائر،  جمعية العلماء المسلمين",
     description: "القاعة الرئيسية، الطابق الأول",
     color: "primary"
   },
@@ -559,9 +559,6 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
                       >
                         <div className="flex-1">
                           <h4 className="font-semibold text-gray-900 mb-1">{item.question}</h4>
-                          <p className={`text-sm text-gray-600 transition-all duration-300 ${expandedFAQ === index ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-                            {item.answer}
-                          </p>
                         </div>
                         <ChevronDown 
                           className={`w-5 h-5 text-emerald-600 transition-transform duration-300 ${expandedFAQ === index ? 'rotate-180' : ''}`}

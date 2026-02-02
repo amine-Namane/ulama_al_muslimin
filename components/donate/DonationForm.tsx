@@ -29,11 +29,11 @@ type DonationFormProps = {
 }
 
 const donationAmounts = [
-  { amount: 100, label: "ريال", impact: "توفير كتب لطالب", popular: false },
-  { amount: 500, label: "ريال", impact: "دعم حلقة لمدة أسبوع", popular: false },
-  { amount: 1000, label: "ريال", impact: "كفالة طالب محتاج", popular: true },
-  { amount: 5000, label: "ريال", impact: "تجهيز قاعة دراسة", popular: false },
-  { amount: 10000, label: "ريال", impact: "دعم مدرسة كاملة", popular: false }
+  { amount: 100, label: "دينار", impact: "توفير كتب لطالب", popular: false },
+  { amount: 500, label: "دينار", impact: "دعم حلقة لمدة أسبوع", popular: false },
+  { amount: 1000, label: "دينار", impact: "كفالة طالب محتاج", popular: true },
+  { amount: 5000, label: "دينار", impact: "تجهيز قاعة دراسة", popular: false },
+  { amount: 10000, label: "دينار", impact: "دعم مدرسة كاملة", popular: false }
 ];
 
 const paymentMethods = [
@@ -136,7 +136,7 @@ const DonationForm = ({
               }}
               className="w-full bg-gray-50 border border-gray-300 rounded-xl py-4 px-4 text-right text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
-            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">ريال</span>
+            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">دينار</span>
           </div>
         </div>
 

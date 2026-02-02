@@ -144,7 +144,7 @@ export default function Footer() {
             <div className="space-y-4 text-right">
               <div className="flex items-center gap-3 ">
                 <MapPin className="text-emerald-400 w-5 h-5" />
-                <p className="text-gray-300">الرياض، المملكة العربية السعودية</p>
+                <p className="text-gray-300">     الجزائر،  جمعية العلماء المسلمين الاربعاء </p>
               </div>
               <div className="flex items-center gap-3 ">
                 <Phone className="text-emerald-400 w-5 h-5" />
@@ -186,7 +186,7 @@ export default function Footer() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            © 2025 جمعية العلماء المسلمين — جميع الحقوق محفوظة.
+            © 2026 جمعية العلماء المسلمين — جميع الحقوق محفوظة.
           </motion.p>
         </div>
       </div>

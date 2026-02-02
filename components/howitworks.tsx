@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { UserCheck, ClipboardCheck, CalendarCheck, Award, ChevronLeft, Users, Clock, BookOpen } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import Link from "next/link"
+
 
 type Step = {
   step: number
@@ -196,10 +198,11 @@ export default function HowItWorksSection() {
 
                       {/* Action Button */}
                       {step.step === 1 && (
-                        <button className={`w-full ${colorClass.button} text-white py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}>
-                          <span>ابدأ التسجيل الآن</span>
-                          <ChevronLeft className="w-4 h-4" />
-                        </button>
+         <Link href={'register'}>
+                             <button className={`w-full mt-6 ${colorClass.button} py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}>
+                               <span>سجل الآن في الحلقة</span>
+                               <ChevronLeft className="w-4 h-4" />
+                             </button></Link>
                       )}
                     </motion.div>
                   </div>

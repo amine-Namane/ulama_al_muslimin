@@ -2,6 +2,7 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from "next/link"
 import { Calendar, Users, Clock, MapPin, Star, ChevronLeft, BookOpen, Search, Filter, X } from 'lucide-react'
 type Halqa = {
   id: number
@@ -494,10 +495,11 @@ export default function HalqatPage() {
                           </div>
 
                           {/* CTA Button */}
-                          <button className={`w-full mt-6 ${colorClass.button} py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}>
-                            <span>سجل الآن في الحلقة</span>
-                            <ChevronLeft className="w-4 h-4" />
-                          </button>
+                           <Link href={'register'}>
+                    <button className={`w-full mt-6 ${colorClass.button} py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}>
+                      <span>سجل الآن في الحلقة</span>
+                      <ChevronLeft className="w-4 h-4" />
+                    </button></Link>
                         </div>
                       </div>
                     </motion.div>

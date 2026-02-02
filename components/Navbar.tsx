@@ -50,41 +50,51 @@ export default function Navbar() {
 
         {/* Mobile Menu Icon */}
         <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-[#10b981] focus:outline-none"
-        >
-          {open ? <X size={28} /> : <Menu size={28} />}
-        </button>
+  onClick={() => setOpen(prev => !prev)}
+  aria-label="Toggle menu"
+  aria-expanded={open}
+  className="md:hidden text-[#10b981] focus:outline-none transition mr-auto"
+>
+  {open ? <X size={28} /> : <Menu size={28} />}
+</button>
+
       </div>
 
       {/* Mobile Dropdown Menu */}
       <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white shadow-lg border-t border-gray-100"
+  {open && (
+    <motion.div
+      key="mobile-menu"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      className="md:hidden bg-white shadow-xl border-t border-gray-100"
+    >
+      <div className="flex flex-col items-start px-6 py-6 space-y-5">
+        {navLinks.map(link => (
+          <Link
+            key={link.name}
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className="w-full text-gray-700 text-lg font-medium hover:text-[#10b981] transition-colors"
           >
-            <div className="flex flex-col items-center py-6 space-y-4">
-              {navLinks.map(link => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-gray-700 hover:text-[#10b981] text-lg font-medium"
-                  onClick={() => setOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <Link href={'login'} className="bg-[#10b981] hover:bg-[#059669] text-white rounded-full px-5">
-                تسجيل الدخول
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {link.name}
+          </Link>
+        ))}
+
+        <Link
+          href="/login"
+          onClick={() => setOpen(false)}
+          className="w-full text-center bg-[#10b981] hover:bg-[#059669] text-white font-semibold py-3 rounded-full transition-colors"
+        >
+          تسجيل الدخول
+        </Link>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
     </header>
   )
 }
